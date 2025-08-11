@@ -1,0 +1,18 @@
+name: Checkout Issue Repro
+
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+jobs:
+- job: CheckoutTest
+  steps:
+  - checkout: git://GitCheckoutIssue/GitCheckoutIssue@refs/heads/main
+    fetchTags: false
+    fetchFilter: blob:none
+    displayName: Checkout Test - Main
+
+  - checkout: self
+    fetchTags: false
+    displayName: Checkout Test - Self
