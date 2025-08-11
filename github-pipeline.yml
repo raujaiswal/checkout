@@ -1,0 +1,35 @@
+name: Checkout Issue Repro
+
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+resources:
+  repositories:
+  - repository: checkout-repo
+    type: github
+    name: raujaiswal/checkout
+    ref: refs/heads/main
+    endpoint: github  # This should match your service connection name
+
+jobs:
+- job: CheckoutTest
+  steps:
+  # Checkout the external GitHub repository
+  - checkout: checkout-repo
+    fetchTags: false
+    fetchFilter: blob:none
+    displayName: Checkout Test - External GitHub Repo
+
+  # Checkout the current repository (where this pipeline is defined)
+  - checkout: self
+    fetchTags: false
+    displayName: Checkout Test - Self
+    
+  - script: |
+      echo "Current directory contents:"
+      dir
+      echo "Checkout repo contents:"
+      dir checkout-repo
+    displayName: 'List directory contents'
